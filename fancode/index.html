@@ -1,1057 +1,464 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SHANAEDITX</title>
+<title>SHANAEDITX - LIVE</title>
 
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&family=Acme&family=Amaranth:wght@400;700&display=swap" rel="stylesheet">
+<!-- Google Font -->
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<!-- Tailwind -->
+<link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+<!-- FontAwesome -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 
 <style>
-
-:root{
-  --bg:#03050a;
-  --card:rgba(18,22,30,0.62);
-  --card-2:#161c26;
-  --card-solid:#10141c;
-  --border:rgba(255,255,255,0.08);
-  --border-soft:rgba(255,255,255,0.06);
-  --muted:#8f98a8;
-  --text:#f4f7fb;
-  --gold:#ffd76a;
-  --accent-live:#1ec876;
-  --accent-live-2:#0f9e5c;
-  --accent-live-shadow:rgba(30,200,118,0.35);
-  --accent-upcoming:#ff4d5e;
-  --accent-upcoming-2:#c81f36;
-  --accent-upcoming-dark:#a31a25;
-  --accent-upcoming-shadow:rgba(255,77,94,0.32);
-  --accent-blue:#4f8bff;
-  --accent-blue-2:#2f5fdb;
-  --shadow-soft:0 20px 40px -20px rgba(0,0,0,.75);
-}
-
-*{ box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
-html,body{ margin:0; padding:0; min-height:100vh; }
 body{
-  background:var(--bg);
-  color:var(--text);
-  font-family:'Bricolage Grotesque','Segoe UI',Arial,sans-serif;
-  -webkit-font-smoothing:antialiased;
-  position:relative;
-}
-*{ user-select:none; }
-button,input{ font-family:inherit; }
-img{ -webkit-user-drag:none; }
-a{ color:inherit; text-decoration:none; }
-
-#bg-layer{
-  position:fixed;
-  inset:0;
-  z-index:0;
-  background-size:cover;
-  background-position:center center;
-  background-repeat:no-repeat;
-  pointer-events:none;
-}
-#bg-layer::after{
-  content:'';
-  position:absolute;
-  inset:0;
-  background:
-    radial-gradient(ellipse 90% 60% at 50% -10%, rgba(79,139,255,0.14), transparent 60%),
-    linear-gradient(180deg, rgba(2,4,9,.72) 0%, rgba(2,4,9,.86) 55%, rgba(2,4,9,.96) 100%);
+background:#0a0f1c;
+font-family:'Poppins',sans-serif;
+color:#edf2f7;
 }
 
-.app{ position:relative; z-index:1; max-width:1360px; margin:0 auto; padding:0 22px 64px; }
-
-header{
-  position:sticky; top:0; z-index:40;
-  display:flex; align-items:center; justify-content:space-between;
-  gap:16px; flex-wrap:wrap;
-  padding:18px 4px;
-  background:rgba(3,5,10,0.78);
-  -webkit-backdrop-filter:blur(18px) saturate(140%);
-  backdrop-filter:blur(18px) saturate(140%);
-  border-bottom:1px solid var(--border);
-  margin-bottom:30px;
-}
-.brand{ display:flex; flex-direction:column; gap:5px; }
-.title{
-  font-size:24px;
-  font-weight:800;
-  background:linear-gradient(100deg,#ff5f6b 0%,#ff4b4b 45%,#ffb04b 100%);
-  -webkit-background-clip:text;
-  background-clip:text;
-  color:transparent;
-  letter-spacing:.5px;
-  line-height:1;
-  font-family:'Bricolage Grotesque','Segoe UI',Arial,sans-serif;
-}
-.last-update{
-  font-size:11px;
-  color:var(--muted);
-  letter-spacing:.6px;
-  display:flex; align-items:center; gap:6px;
-}
-.last-update::before{
-  content:'';
-  width:6px; height:6px; border-radius:50%;
-  background:var(--accent-live);
-  box-shadow:0 0 8px var(--accent-live);
-  flex:none;
+button{
+font-family:'Poppins',sans-serif;
 }
 
-.header-right{
-  display:flex;
-  align-items:center;
-  gap:10px;
+.match-tile{
+background:#131d2f;
+border-radius:32px;
+border:1px solid #253247;
+overflow:hidden;
+display:flex;
+flex-direction:column;
+box-shadow:0 15px 30px -10px rgba(0,0,0,0.8);
+transition:.25s;
 }
 
-.lang-select{
-  appearance:none;
-  -webkit-appearance:none;
-  background:var(--card-solid);
-  border:1px solid var(--border);
-  color:var(--text);
-  font-family:inherit;
-  font-size:12px;
-  padding:9px 28px 9px 12px;
-  border-radius:10px;
-  cursor:pointer;
-  outline:none;
-  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' fill='none'%3E%3Cpath stroke='%238b949e' stroke-width='1.5' d='M1 1l4 4 4-4'/%3E%3C/svg%3E");
-  background-repeat:no-repeat;
-  background-position:right 10px center;
-  max-width:130px;
-  transition:border-color .2s, background .2s;
-}
-.lang-select:hover{ background-color:#161c26; }
-.lang-select:focus{ border-color:rgba(79,139,255,.6); }
-
-.join-btn{
-  appearance:none; border:none; cursor:pointer;
-  display:flex; align-items:center; gap:8px;
-  background:linear-gradient(135deg,var(--accent-blue),var(--accent-blue-2));
-  color:#fff;
-  font-weight:700;
-  font-size:13px;
-  letter-spacing:.4px;
-  padding:11px 19px;
-  border-radius:11px;
-  box-shadow:0 8px 22px -6px rgba(47,95,219,.55);
-  transition:filter .2s ease, transform .15s ease, box-shadow .2s ease;
-}
-.join-btn:hover{ filter:brightness(1.12); box-shadow:0 10px 26px -6px rgba(47,95,219,.7); }
-.join-btn:active{ transform:scale(.96); }
-
-.controls{
-  display:flex; justify-content:flex-end;
-  margin-bottom:24px;
-}
-.search-wrap{
-  position:relative;
-  width:100%; max-width:340px;
-}
-.search-wrap svg{
-  position:absolute; left:14px; top:50%; transform:translateY(-50%);
-  opacity:.45; pointer-events:none;
-}
-.search-wrap input{
-  width:100%;
-  background:var(--card-solid);
-  border:1px solid var(--border);
-  color:var(--text);
-  font-size:13px;
-  letter-spacing:.3px;
-  padding:12px 14px 12px 39px;
-  border-radius:11px;
-  outline:none;
-  transition:border-color .2s ease, background .2s ease;
-}
-.search-wrap input::placeholder{ color:var(--muted); }
-.search-wrap input:focus{ border-color:rgba(79,139,255,.55); background:#12161f; }
-
-.grid{
-  display:grid;
-  grid-template-columns:repeat(auto-fit, minmax(290px, 1fr));
-  gap:26px;
+.match-tile:hover{
+background:#17253b;
+border-color:#3b82f6;
+transform:scale(1.02) translateY(-4px);
+box-shadow:0 25px 40px -8px #1e3a8a40;
 }
 
-.loading-state,.empty-state{
-  grid-column:1/-1;
-  text-align:center;
-  padding:70px 20px;
-  color:var(--muted);
-  font-size:13px;
-  letter-spacing:.6px;
-  border:1px dashed var(--border);
-  border-radius:16px;
-  background:rgba(255,255,255,.015);
+.img-wrapper{
+overflow:hidden;
+height:210px;
+position:relative;
 }
 
-.card{
-  position:relative;
-  background:var(--card);
-  border:1px solid var(--border);
-  border-radius:16px;
-  overflow:hidden;
-  box-shadow:var(--shadow-soft);
-  -webkit-backdrop-filter:blur(14px);
-  backdrop-filter:blur(14px);
-  transition:transform .3s cubic-bezier(.2,.7,.3,1), box-shadow .3s ease, border-color .3s ease;
-  display:flex; flex-direction:column;
-}
-.card::before{
-  content:'';
-  position:absolute; inset:0;
-  border-radius:inherit;
-  padding:1px;
-  background:linear-gradient(160deg, rgba(255,255,255,.14), rgba(255,255,255,0) 40%);
-  -webkit-mask:linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-  -webkit-mask-composite:xor;
-  mask-composite:exclude;
-  pointer-events:none;
-}
-.card:hover{
-  transform:translateY(-5px);
-  border-color:rgba(79,139,255,.35);
-  box-shadow:0 26px 50px -20px rgba(0,0,0,.85), 0 0 0 1px rgba(79,139,255,.12);
+.match-img{
+width:100%;
+height:100%;
+object-fit:cover;
 }
 
-.thumb-wrap{
-  position:relative;
-  width:100%;
-  aspect-ratio:16/9;
-  background:#000;
-  display:block;
-  overflow:hidden;
-}
-.thumb-wrap img{
-  position:absolute; inset:0;
-  width:100%; height:100%;
-  object-fit:cover;
-  object-position:top;
-  display:block;
-  transition:transform .5s cubic-bezier(.2,.7,.3,1);
-}
-.card:hover .thumb-wrap img{ transform:scale(1.06); }
-.thumb-wrap::after{
-  content:'';
-  position:absolute; inset:0;
-  background:linear-gradient(180deg, rgba(0,0,0,0) 55%, rgba(4,6,10,.9) 100%);
-  pointer-events:none;
+.live-badge{
+background:#b91c1c;
+color:white;
+font-size:12px;
+padding:4px 10px;
+border-radius:20px;
+position:absolute;
+top:12px;
+left:12px;
+animation:liveBlink 1s infinite;
 }
 
-.lang-badge{
-  position:absolute; top:11px; left:11px; z-index:2;
-  display:flex; align-items:center; gap:5px;
-  background:rgba(6,8,12,.62);
-  -webkit-backdrop-filter:blur(8px);
-  backdrop-filter:blur(8px);
-  border:1px solid rgba(255,215,106,.55);
-  color:var(--gold);
-  font-size:10px;
-  font-weight:700;
-  letter-spacing:.6px;
-  padding:5px 10px;
-  border-radius:20px;
-}
-.lang-badge svg{ flex:none; }
-
-.meta{
-  padding:17px 18px 19px;
-  display:flex; flex-direction:column; gap:9px;
-  flex:1;
-  text-align:center;
-}
-.teams{
-  font-size:17px;
-  font-weight:800;
-  letter-spacing:.3px;
-  text-transform:uppercase;
-  line-height:1.28;
-  font-family:'Bricolage Grotesque','Segoe UI',Arial,sans-serif;
-}
-.event{
-  font-size:12.5px;
-  color:var(--muted);
-  letter-spacing:.3px;
+@keyframes liveBlink{
+0%{opacity:1;}
+50%{opacity:0.3;}
+100%{opacity:1;}
 }
 
-.status-badge{
-  position:absolute; top:11px; right:11px; z-index:2;
-  display:flex; align-items:center; gap:5px;
-  background:rgba(6,8,12,.62);
-  -webkit-backdrop-filter:blur(8px);
-  backdrop-filter:blur(8px);
-  font-size:9.5px;
-  font-weight:700;
-  letter-spacing:.6px;
-  padding:5px 10px;
-  border-radius:20px;
-}
-.status-badge.live{ color:#7fe6ac; border:1px solid rgba(30,200,118,.5); box-shadow:0 0 14px -4px rgba(30,200,118,.55); }
-.status-badge.upcoming{ color:#ff9aa5; border:1px solid rgba(255,77,94,.45); }
-.status-badge.completed{ color:#c8ccd1; border:1px solid rgba(248,249,250,.2); }
-.status-dot-mini{ width:5px; height:5px; border-radius:50%; background:currentColor; flex:none; }
-.status-badge.live .status-dot-mini{ animation:miniPulse 1.8s infinite; }
-@keyframes miniPulse{
-  0%,100%{ opacity:1; }
-  50%{ opacity:.4; }
+.scheduled-badge{
+background:rgba(0,0,0,.6);
+color:white;
+font-size:12px;
+padding:4px 10px;
+border-radius:20px;
+position:absolute;
+top:12px;
+left:12px;
 }
 
-.card-time{
-  font-size:11px;
-  color:var(--muted);
-  letter-spacing:.4px;
+.watch-btn{
+background:#2563eb;
+border-radius:50px;
+padding:12px;
+font-weight:600;
+display:flex;
+align-items:center;
+justify-content:center;
+gap:6px;
+margin-top:12px;
+cursor:pointer;
 }
 
-.actions{ margin-top:auto; display:flex; flex-direction:column; gap:9px; padding-top:6px; }
-
-.btn{
-  appearance:none; border:none; cursor:pointer;
-  width:100%;
-  font-weight:800;
-  font-size:13px;
-  letter-spacing:.6px;
-  padding:12.5px 14px;
-  border-radius:11px;
-  display:flex; align-items:center; justify-content:center; gap:8px;
-  transition:filter .2s ease, transform .15s ease, box-shadow .2s ease;
-  font-family:inherit;
-}
-.btn:active{ transform:scale(.97); }
-.btn-watch-now{
-  background:linear-gradient(135deg,var(--accent-live),var(--accent-live-2));
-  color:#04120a;
-  box-shadow:0 8px 20px -6px var(--accent-live-shadow);
-}
-.btn-watch-now:hover{ filter:brightness(1.08); box-shadow:0 10px 24px -6px var(--accent-live-shadow); }
-.btn-watch-now.is-disabled{
-  background:#232830; color:var(--muted); box-shadow:none; cursor:not-allowed;
-}
-.btn-upcoming{
-  background:linear-gradient(135deg,var(--accent-upcoming),var(--accent-upcoming-2));
-  color:#fff;
-  box-shadow:0 8px 20px -6px var(--accent-upcoming-shadow);
-}
-.btn-upcoming:hover{ filter:brightness(1.08); }
-.btn-completed{
-  background:#f2f4f7;
-  color:#0a0d12;
-  box-shadow:0 6px 16px -4px rgba(248,249,250,.18);
+.watch-btn:hover{
+background:#1d4ed8;
 }
 
-.btn-ww{
-  background:rgba(79,139,255,.07);
-  color:#9cc7ff;
-  border:1px solid rgba(79,139,255,.3);
-}
-.btn-ww:hover{ background:rgba(79,139,255,.14); }
-.btn-ww .chev{ margin-left:auto; transition:transform .3s ease; }
-.btn-ww.open{ background:rgba(79,139,255,.14); }
-.btn-ww.open .chev{ transform:rotate(180deg); }
-
-.ww-panel-wrap{
-  display:grid;
-  grid-template-rows:0fr;
-  opacity:0;
-  transition:grid-template-rows .38s cubic-bezier(.4,0,.2,1), opacity .3s ease;
-}
-.ww-panel-wrap.open{ grid-template-rows:1fr; opacity:1; margin-top:1px; }
-.ww-panel-inner{ overflow:hidden; display:flex; flex-direction:column; gap:7px; }
-.ww-row{
-  display:flex; align-items:center; gap:10px;
-  padding:10px 12px;
-  background:var(--card-2);
-  border:1px solid var(--border);
-  border-radius:9px;
-  cursor:pointer;
-  transition:background .2s ease, border-color .2s ease, transform .15s ease;
-}
-.ww-row:hover{
-  background:rgba(120,180,255,.08);
-  border-color:rgba(120,180,255,.32);
-  transform:translateX(2px);
-}
-.ww-flag{ font-size:16px; line-height:1; flex:none; }
-.ww-name{ font-size:12px; font-weight:700; flex:1; text-align:left; letter-spacing:.2px; }
-.ww-code{ font-size:10px; font-weight:700; letter-spacing:.5px; color:var(--muted); }
-.ww-row:hover .ww-code{ color:#9cc7ff; }
-
-footer{
-  margin-top:54px;
-  padding-top:28px;
-  border-top:1px solid var(--border);
-  display:flex; flex-direction:column; align-items:center; gap:12px;
-  text-align:center;
-}
-footer .note{
-  font-size:11px;
-  letter-spacing:1.2px;
-  color:var(--muted);
-  font-weight:700;
-}
-.visitor-counter-box{
-  display:flex; align-items:center; gap:12px;
-  padding:10px 20px;
-  background:var(--card-solid);
-  border:1px solid var(--border);
-  border-radius:12px;
-  box-shadow:var(--shadow-soft);
-}
-.vc-item{ display:flex; flex-direction:column; align-items:center; gap:2px; }
-.vc-value{
-  font-size:15px; font-weight:800; color:var(--text);
-  letter-spacing:.5px; font-variant-numeric:tabular-nums;
-  font-family:'Bricolage Grotesque','Segoe UI',Arial,sans-serif;
-}
-.vc-label{ font-size:8.5px; letter-spacing:.8px; color:var(--muted); text-transform:uppercase; }
-.vc-sep{ width:1px; height:22px; background:var(--border); }
-
-.popup-overlay{
-  position:fixed; inset:0;
-  background:rgba(0,0,0,.86);
-  -webkit-backdrop-filter:blur(14px);
-  backdrop-filter:blur(14px);
-  display:flex; align-items:center; justify-content:center;
-  padding:20px;
-  z-index:99999;
-}
-.popup-overlay.hidden{ display:none; }
-.popup-wrap{
-  position:relative;
-  width:100%; max-width:358px;
-  padding:2px;
-  background:linear-gradient(145deg, rgba(255,204,0,.8) 0%, rgba(255,224,80,.4) 50%, rgba(255,204,0,.8) 100%);
-  border-radius:18px;
-  box-shadow:0 0 50px rgba(255,204,0,.14), 0 30px 70px rgba(0,0,0,.72);
-  animation:popIn .42s cubic-bezier(.175,.885,.32,1.275) both;
-}
-@keyframes popIn{
-  from{ opacity:0; transform:scale(.87) translateY(24px); }
-  to{ opacity:1; transform:scale(1) translateY(0); }
-}
-.popup-box{
-  background:linear-gradient(168deg, #1e1e26 0%, #0e0e13 100%);
-  border-radius:16px;
-  padding:34px 24px 26px;
-  text-align:center;
-}
-.popup-title{
-  color:#ffcc00;
-  font-family:'Acme',sans-serif;
-  font-size:30px;
-  letter-spacing:.5px;
-  margin-bottom:12px;
-}
-.popup-text{
-  color:#a0a0a8;
-  font-size:14px;
-  line-height:1.65;
-  margin-bottom:24px;
-  font-family:'Segoe UI',Arial,sans-serif;
-}
-.popup-text b{
-  color:#fff;
-  font-family:'Amaranth',sans-serif;
-  font-size:17px;
-  display:block;
-  margin-top:7px;
-}
-.btn-popup{
-  width:100%; padding:14px; border:none;
-  border-radius:13px;
-  font-family:'Amaranth',sans-serif;
-  cursor:pointer;
-  transition:transform .18s, box-shadow .18s;
-  appearance:none;
-  touch-action:manipulation;
-  text-decoration:none;
-  display:block;
-}
-.btn-popup:active{ transform:scale(.95); }
-.btn-join-main{
-  background:linear-gradient(90deg, #1bcc26, #17b823);
-  color:#fff;
-  font-size:18px; font-weight:700;
-  letter-spacing:.6px;
-  box-shadow:0 5px 20px rgba(23,184,35,.32);
-  margin-bottom:9px;
-  line-height:1;
-  text-align:center;
-}
-.btn-join-main:hover{ box-shadow:0 8px 26px rgba(23,184,35,.42); }
-.btn-joined-main{
-  background:transparent;
-  color:#484850;
-  font-size:12px; font-weight:400;
-  width:auto; margin:0 auto;
-  padding:7px 14px;
-  text-align:center;
+.share-upcoming-btn{
+background:#334155;
+border-radius:50px;
+padding:10px;
+font-weight:600;
+font-size:13px;
+display:flex;
+align-items:center;
+justify-content:center;
+gap:6px;
+margin-top:8px;
+cursor:pointer;
+color:#cbd5e1;
+transition:.2s;
 }
 
-.translate-indicator{
-  position:fixed;
-  bottom:20px;
-  right:20px;
-  z-index:100;
-  background:rgba(13,17,23,.92);
-  border:1px solid var(--border);
-  border-radius:8px;
-  padding:8px 14px;
-  font-size:11px;
-  color:var(--muted);
-  display:none;
-  align-items:center;
-  gap:7px;
-  backdrop-filter:blur(8px);
-}
-.translate-indicator.visible{ display:flex; }
-.translate-spinner{
-  width:12px; height:12px;
-  border:2px solid var(--border);
-  border-top-color:#9cc7ff;
-  border-radius:50%;
-  animation:spin .7s linear infinite;
-  flex:none;
-}
-@keyframes spin{ to{ transform:rotate(360deg); } }
-
-button:focus-visible,.ww-row:focus-visible,input:focus-visible,.lang-select:focus-visible{
-  outline:2px solid #6cb2ff;
-  outline-offset:2px;
+.share-upcoming-btn:hover{
+background:#475569;
+color:#fff;
 }
 
-@media (prefers-reduced-motion:reduce){
-  *{ animation-duration:.001ms !important; animation-iteration-count:1 !important; transition-duration:.001ms !important; }
+#qualityModal{
+position:fixed;
+inset:0;
+background:rgba(0,0,0,.75);
+backdrop-filter:blur(6px);
+display:flex;
+align-items:center;
+justify-content:center;
+z-index:9999;
 }
 
-@media (max-width:450px){
-  .title{ font-size:19px; }
-  .join-btn{ padding:9px 14px; font-size:12px; }
-  .controls{ justify-content:stretch; }
-  .search-wrap{ max-width:100%; }
-  .lang-select{ max-width:110px; font-size:11px; }
+#qualityModal.hidden{
+display:none;
 }
 
+#qualityModal .modal-content{
+width:90%;
+max-width:360px;
+background:#111827;
+border-radius:18px;
+padding:22px;
+text-align:center;
+box-shadow:0 20px 40px rgba(0,0,0,.7);
+}
+
+#qualityModal h2{
+font-size:20px;
+font-weight:600;
+margin-bottom:18px;
+color:#f9fafb;
+}
+
+#qualityList{
+display:flex;
+flex-direction:column;
+gap:10px;
+}
+
+.quality-item{
+background:#1f2937;
+border-radius:12px;
+padding:14px 16px;
+font-size:16px;
+font-weight:500;
+color:#e5e7eb;
+display:flex;
+align-items:center;
+justify-content:space-between;
+cursor:pointer;
+transition:.2s;
+}
+
+.quality-item::after{
+content:">";
+font-size:12px;
+opacity:.7;
+}
+
+.quality-item:hover{
+background:#2563eb;
+color:white;
+transform:translateY(-1px);
+}
+
+#qualityModal .btn{
+margin-top:16px;
+background:#ef4444;
+color:white;
+border:none;
+border-radius:10px;
+padding:10px;
+font-size:14px;
+font-weight:600;
+cursor:pointer;
+}
+
+#qualityModal .btn:hover{
+background:#dc2626;
+}
+
+#telegramModal {
+  position: fixed;
+  inset: 0;
+  background: rgba(5, 8, 20, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 1s ease, visibility 1s ease;
+}
+
+#telegramModal.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+#telegramModal .modal-content {
+  width: 90%;
+  max-width: 380px;
+  background: linear-gradient(145deg, #131d2f, #0d1522);
+  border: 1px solid rgba(59, 130, 246, 0.3);
+  border-radius: 28px;
+  padding: 30px 24px;
+  text-align: center;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7), 0 0 30px rgba(37, 99, 235, 0.15);
+  transform: translateY(20px) scale(0.95);
+  transition: transform 1s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+#telegramModal.active .modal-content {
+  transform: translateY(0) scale(1);
+}
+
+#toast {
+  position: fixed;
+  bottom: 40px;
+  left: 50%;
+  transform: translateX(-50%) translateY(100px);
+  background: #10b981;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 30px;
+  font-size: 14px;
+  font-weight: 500;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+  z-index: 3000;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+  opacity: 0;
+}
+
+#toast.show {
+  transform: translateX(-50%) translateY(0);
+  opacity: 1;
+}
+
+*{
+-webkit-user-select:none;
+-moz-user-select:none;
+-ms-user-select:none;
+user-select:none;
+-webkit-tap-highlight-color: transparent;
+}
+
+.match-time{
+font-size:13px;
+color:#9ca3af;
+margin-top:6px;
+}
 </style>
 </head>
 
-<body>
+<body class="p-5 max-w-7xl mx-auto">
 
-<div id="bg-layer"></div>
-
-<div class="translate-indicator" id="translateIndicator">
-  <div class="translate-spinner"></div>
-  <span id="translateMsg">Translating…</span>
+<div class="text-center mt-4 mb-8">
+  <div class="inline-flex items-center justify-center gap-3 bg-[#131d2f] py-3 px-7 rounded-full border border-blue-900/50">
+    <span class="text-3xl font-black tracking-tight text-white">SHANAEDITX</span>
+  </div>
+  <p class="text-gray-500 text-sm mt-3 tracking-wide">LIVE STREAMING</p>
 </div>
 
-<div class="app">
+<div id="matches-container" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 mt-6"></div>
 
-  <header>
-    <div class="brand">
-      <div class="title">SHANAEDITX</div>
-      <div class="last-update" id="lastUpdate">LAST UPDATE: LOADING...</div>
-    </div>
-    <div class="header-right">
-      <select class="lang-select" id="langSelect" title="Select display language">
-        <option value="en">English</option>
-        <option value="hi">हिन्दी</option>
-        <option value="bn">বাংলা</option>
-        <option value="ta">தமிழ்</option>
-        <option value="te">తెలుగు</option>
-        <option value="ml">മലയാളം</option>
-        <option value="kn">ಕನ್ನಡ</option>
-        <option value="mr">मराठी</option>
-        <option value="gu">ગુજરાતી</option>
-        <option value="pa">ਪੰਜਾਬੀ</option>
-        <option value="or">ଓଡ଼ିଆ</option>
-        <option value="as">অসমীয়া</option>
-        <option value="ur">اردو</option>
-        <option value="mai">मैथिली</option>
-        <option value="kok">कोंकणी</option>
-        <option value="ne">नेपाली</option>
-        <option value="bho">भोजपुरी</option>
-        <option value="doi">डोगरी</option>
-        <option value="sa">संस्कृतम्</option>
-        <option value="sd">سنڌي</option>
-        <option value="ks">کٲشُر</option>
-        <option value="mni">মৈতৈলোন্</option>
-        <option value="sat">ᱥᱟᱱᱛᱟᱲᱤ</option>
-      </select>
-      <button type="button" class="join-btn" id="joinTelegramBtn">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M21.5 4.5L2.7 11.9c-1.2.5-1.2 1.2-.2 1.5l4.8 1.5 1.8 5.6c.2.6.4.8.9.8.4 0 .6-.2.9-.5l2.2-2.1 4.6 3.4c.8.5 1.4.2 1.6-.8l3-14c.3-1.3-.5-1.9-1.8-1.8z"/></svg>
-        JOIN TELEGRAM
-      </button>
-    </div>
-  </header>
+<div id="toast">Match link copied to clipboard!</div>
 
-  <div class="controls">
-    <div class="search-wrap">
-      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
-      <input type="text" id="searchInput" placeholder="SEARCH TEAM OR EVENT...">
-    </div>
+<div id="qualityModal" class="hidden">
+  <div class="modal-content">
+    <h2>Select Quality</h2>
+    <div id="qualityList"></div>
+    <button onclick="closeQuality()" class="btn">Close</button>
   </div>
-
-  <div id="matchesGrid" class="grid">
-    <div class="loading-state">LOADING MATCHES...</div>
-  </div>
-
-  <footer>
-    <div class="note"> OAI | ALL RIGHTS RESERVED</div>
-    <div class="visitor-counter-box" id="visitorCounter">
-      <div class="vc-item"><span class="vc-value" id="vcTotal">—</span><span class="vc-label">Visits</span></div>
-      <div class="vc-sep"></div>
-      <div class="vc-item"><span class="vc-value" id="vcUnique">—</span><span class="vc-label">Unique</span></div>
-    </div>
-  </footer>
-
 </div>
 
-<div class="popup-overlay hidden" id="telegramModal">
-  <div class="popup-wrap">
-    <div class="popup-box">
-      <div class="popup-title">Follow Us !!</div>
-      <div class="popup-text">
-        Join our Telegram channel SHANAEDITX<br>
-        <b>FANCODE LIVE</b>
-        For instant match links and live updates.
-      </div>
-      <a class="btn-popup btn-join-main" id="joinButton" target="_blank" rel="noopener noreferrer" href="https://t.me/+U_REj979FENlMTM9">JOIN NOW</a>
-      <button class="btn-popup btn-joined-main" id="closeButton" type="button">Already Joined</button>
+<div id="telegramModal">
+  <div class="modal-content">
+    <div class="relative w-16 h-16 bg-gradient-to-tr from-blue-600 to-blue-400 text-white rounded-2xl flex items-center justify-center mx-auto mb-5 text-3xl shadow-lg shadow-blue-500/30">
+      <i class="fab fa-telegram-plane"></i>
     </div>
+    <h2 class="text-2xl font-bold text-white mb-2">Join Our Telegram</h2>
+    <p class="text-gray-400 text-sm mb-7 leading-relaxed">Join our official Telegram channel for instant match links and updates!</p>
+    <a href="https://t.me/+U_REj979FENlMTM9" target="_blank" class="w-full bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-700 hover:to-blue-600 text-white font-bold py-3.5 px-4 rounded-xl flex items-center justify-center gap-2.5 mb-4 shadow-xl shadow-blue-600/30 text-base no-underline">
+      <i class="fab fa-telegram text-xl"></i> JOIN NOW
+    </a>
+    <button onclick="closeTelegramModal()" class="w-full text-gray-400 hover:text-white text-xs font-semibold py-2 tracking-wider uppercase transition bg-transparent border-none cursor-pointer">
+      I've joined
+    </button>
   </div>
 </div>
 
 <script>
-const CNPTV_SOURCE = 'https://raw.githubusercontent.com/kajju027/Fancode-Events-Json/main/fan.json';
-const WORLD_SOURCE = 'https://raw.githubusercontent.com/kajju027/Fancode-Events-Json/main/fancode.json';
-const PLAYER_PAGE = 'play.html';
-const TELEGRAM_LINK = 'https://t.me/+U_REj979FENlMTM9';
-const FALLBACK_IMG = 'https://www.fancode.com/skillup-uploads/cms-media/Cricket_Fallback_Old_match-card.jpg';
-const HIT_COUNTER_URL = 'https://sayan-prime.pages.dev/api/hit?key=Fancode';
-const REFRESH_INTERVAL_MS = 60000;
-
-const BG_MOBILE = 'https://wallpapercat.com/w/full/8/c/c/57325-2160x3840-mobile-4k-milky-way-background.jpg';
-const BG_DESKTOP = 'https://wallpapercat.com/w/full/4/e/9/185978-3840x2160-desktop-4k-moon-background-photo.jpg';
-
-const LANG_CODE_MAP = {
-  ENGLISH:'eng', HINDI:'hin', BANGLA:'ban', BENGALI:'ban', TAMIL:'tam',
-  TELUGU:'tel', KANNADA:'kan', MARATHI:'mar', MALAYALAM:'mal', PUNJABI:'pan',
-  GUJARATI:'guj', URDU:'urd', ODIA:'ori', ASSAMESE:'asm', BHOJPURI:'bho'
-};
-
-const LANG_NAMES = {
-  en:'English', hi:'Hindi', bn:'Bengali', ta:'Tamil', te:'Telugu',
-  ml:'Malayalam', kn:'Kannada', mr:'Marathi', gu:'Gujarati', pa:'Punjabi',
-  or:'Odia', as:'Assamese', ur:'Urdu', mai:'Maithili', kok:'Konkani',
-  ne:'Nepali', bho:'Bhojpuri', doi:'Dogri', sa:'Sanskrit', sd:'Sindhi',
-  ks:'Kashmiri', mni:'Meitei', sat:'Santali'
-};
-
-const ICON_GLOBE = '<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.4 2.7 3.8 6 3.8 9s-1.4 6.3-3.8 9c-2.4-2.7-3.8-6-3.8-9s1.4-6.3 3.8-9z"/></svg>';
-const ICON_WW = '<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.4 2.7 3.8 6 3.8 9s-1.4 6.3-3.8 9c-2.4-2.7-3.8-6-3.8-9s1.4-6.3 3.8-9z"/></svg>';
-const ICON_CHEV = '<svg class="chev" viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M6 9l6 6 6-6"/></svg>';
-
-const grid = document.getElementById('matchesGrid');
-const lastUpdateEl = document.getElementById('lastUpdate');
-const searchInput = document.getElementById('searchInput');
-const langSelect = document.getElementById('langSelect');
-const translateIndicator = document.getElementById('translateIndicator');
-const translateMsg = document.getElementById('translateMsg');
+const DATA_URL = 'https://raw.githubusercontent.com/kajju027/Fancode-Events-Json/refs/heads/main/fancode.json';
+const PLAYER_URL = 'fc-play.html';
+const container = document.getElementById("matches-container");
 
 let allMatches = [];
-let lastUpdatedAt = null;
-let lastWorldSnapshot = null;
-let openPanels = new Set();
-let currentLang = localStorage.getItem('fc_lang') || 'en';
-let translationCache = {};
-let isTranslating = false;
 
-langSelect.value = currentLang;
-
-function isMobile(){
-  return window.matchMedia('(max-width:767px)').matches;
-}
-
-function applyBackground(){
-  const bgLayer = document.getElementById('bg-layer');
-  bgLayer.style.backgroundImage = isMobile()
-    ? `url('${BG_MOBILE}')`
-    : `url('${BG_DESKTOP}')`;
-}
-
-applyBackground();
-window.addEventListener('resize', applyBackground);
-
-function esc(str){
-  return String(str == null ? '' : str).replace(/[&<>"']/g, s =>
-    ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[s])
-  );
-}
-
-function langToCode(rawLang, isLive){
-  let lang = String(rawLang || '').trim().toUpperCase();
-  if(!lang || lang === 'BLOODY_SWEET'){
-    if(isLive){ lang = 'ENGLISH'; } else { return null; }
+document.addEventListener("DOMContentLoaded", () => {
+  if (!localStorage.getItem('telegramJoined')) {
+    setTimeout(() => {
+      document.getElementById('telegramModal').classList.add('active');
+    }, 200);
   }
-  if(LANG_CODE_MAP[lang]) return LANG_CODE_MAP[lang];
-  const short = lang.slice(0,3).toLowerCase();
-  return short || 'eng';
+});
+
+function closeTelegramModal() {
+  localStorage.setItem('telegramJoined', 'true');
+  const modal = document.getElementById('telegramModal');
+  modal.classList.remove('active');
+  setTimeout(() => {
+    modal.style.display = 'none';
+  }, 1000);
 }
 
-function langLabel(rawLang){
-  const lang = String(rawLang || '').trim().toUpperCase();
-  if(!lang) return null;
-  if(lang === 'BLOODY_SWEET') return 'MULTI';
-  return lang;
-}
+fetch(DATA_URL)
+  .then(res => res.json())
+  .then(data => {
+    allMatches = data.matches || [];
+    container.innerHTML = "";
 
-function parseMatchTime(str){
-  if(!str) return null;
-  const months = {january:0,february:1,march:2,april:3,may:4,june:5,july:6,
-                   august:7,september:8,october:9,november:10,december:11};
-  const m = String(str).match(/(\d{1,2})\s+([A-Za-z]+)\s+(\d{4})\s+(\d{1,2}):(\d{2})\s*(AM|PM)?/i);
-  if(!m){ const d = new Date(str); return isNaN(d) ? null : d; }
-  let [,day,monthName,year,hour,min,ampm] = m;
-  const month = months[monthName.toLowerCase()];
-  if(month === undefined){ const d = new Date(str); return isNaN(d) ? null : d; }
-  day=+day; year=+year; hour=+hour; min=+min;
-  if(ampm){
-    ampm = ampm.toUpperCase();
-    if(ampm === 'PM' && hour < 12) hour += 12;
-    if(ampm === 'AM' && hour === 12) hour = 0;
-  }
-  return new Date(year, month, day, hour, min);
-}
-
-function parseUpdatedAt(str){
-  if(!str) return null;
-  const m = String(str).match(/(\d{1,2})\/(\d{1,2})\/(\d{4}),?\s*(\d{1,2}):(\d{2}):(\d{2})\s*(am|pm)/i);
-  if(!m){ const d = new Date(str); return isNaN(d) ? null : d; }
-  let day=+m[1],month=+m[2],year=+m[3],hour=+m[4],min=+m[5],sec=+m[6];
-  const ampm = m[7].toLowerCase();
-  if(ampm === 'pm' && hour < 12) hour += 12;
-  if(ampm === 'am' && hour === 12) hour = 0;
-  return new Date(year, month-1, day, hour, min, sec);
-}
-
-function formatMatchTime(date){
-  if(!date) return 'TIME TBA';
-  const datePart = date.toLocaleDateString('en-IN',{day:'2-digit',month:'short'}).toUpperCase();
-  let h = date.getHours();
-  const mm = String(date.getMinutes()).padStart(2,'0');
-  const ap = h >= 12 ? 'PM' : 'AM';
-  h = h % 12; if(h === 0) h = 12;
-  return `${datePart}, ${h}:${mm} ${ap}`;
-}
-
-function formatAbsoluteIST(date){
-  if(!date) return 'UNAVAILABLE';
-  const datePart = date.toLocaleDateString('en-IN',{day:'2-digit',month:'short'}).toUpperCase();
-  let h = date.getHours();
-  const mm = String(date.getMinutes()).padStart(2,'0');
-  const ap = h >= 12 ? 'PM' : 'AM';
-  h = h % 12; if(h === 0) h = 12;
-  return `${datePart}, ${h}:${mm} ${ap} IST`;
-}
-
-function buildPlayerUrl(id, langCode, streamIndex){
-  return `${PLAYER_PAGE}?id=${id}_${langCode}&s=${streamIndex}`;
-}
-
-async function translateBatch(texts, targetLang){
-  if(targetLang === 'en') return texts;
-  const cacheKey = `${targetLang}::${texts.join('||')}`;
-  if(translationCache[cacheKey]) return translationCache[cacheKey];
-
-  const langName = LANG_NAMES[targetLang] || targetLang;
-  const prompt = `Translate each of the following cricket match titles and tournament names into ${langName}. Keep team names, abbreviations, and formats recognizable. Return ONLY a JSON array of translated strings in the same order, no extra text.\n\n${JSON.stringify(texts)}`;
-
-  try {
-    const res = await fetch('https://api.anthropic.com/v1/messages', {
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({
-        model:'claude-sonnet-4-6',
-        max_tokens:1000,
-        messages:[{role:'user', content: prompt}]
-      })
+    const matches = allMatches.sort((a, b) => {
+      const aLive = (a.status || "").toUpperCase() === "LIVE";
+      const bLive = (b.status || "").toUpperCase() === "LIVE";
+      return bLive - aLive;
     });
-    const data = await res.json();
-    const raw = (data.content || []).map(b => b.text || '').join('');
-    const clean = raw.replace(/```json|```/g,'').trim();
-    const parsed = JSON.parse(clean);
-    if(Array.isArray(parsed) && parsed.length === texts.length){
-      translationCache[cacheKey] = parsed;
-      return parsed;
-    }
-  } catch(e){}
-  return texts;
-}
 
-function renderCard(m, translated){
-  const langTag = m.status === 'LIVE' ? langLabel(m.language) : null;
-  const timeLabel = formatMatchTime(m.time);
-  const displayTitle = (translated && translated.title) ? translated.title : m.title;
-  const displayTournament = (translated && translated.tournament) ? translated.tournament : m.tournament;
-
-  let statusHtml = '';
-  let actionsHtml = '';
-
-  if(m.status === 'LIVE'){
-    statusHtml = `<span class="status-badge live"><span class="status-dot-mini"></span>LIVE</span>`;
-    const canWatch = m.cnptvUrl && m.langCode;
-    const watchAttrs = canWatch ? `data-url="${esc(buildPlayerUrl(m.id,m.langCode,0))}"` : 'disabled';
-    const wwOptions = [
-      {key:'lk',flag:'🇱🇰',name:'Only Sri Lanka User',url:m.lk,idx:1},
-      {key:'np',flag:'🇳🇵',name:'Only Nepal User',url:m.np,idx:2},
-      {key:'bd',flag:'🇧🇩',name:'Only Bangladesh User',url:m.bd,idx:3}
-    ].filter(o => o.url);
-    const hasAnyWW = m.langCode && wwOptions.length > 0;
-    const isOpen = openPanels.has(String(m.id));
-    actionsHtml = `
-      <button type="button" class="btn btn-watch-now ${canWatch?'':'is-disabled'}" ${watchAttrs}>WATCH NOW</button>
-      ${hasAnyWW ? `
-      <button type="button" class="btn btn-ww ${isOpen?'open':''}" data-target="ww-${m.id}">
-        ${ICON_WW} WORLD WIDE STREAM ${ICON_CHEV}
-      </button>
-      <div class="ww-panel-wrap ${isOpen?'open':''}" id="ww-${m.id}">
-        <div class="ww-panel-inner">
-          ${wwOptions.map(o => `
-            <div class="ww-row" tabindex="0" data-url="${esc(buildPlayerUrl(m.id,m.langCode,o.idx))}">
-              <span class="ww-flag">${o.flag}</span>
-              <span class="ww-name">${o.name}</span>
-              <span class="ww-code">${o.key.toUpperCase()}</span>
-            </div>`).join('')}
-        </div>
-      </div>` : ''}
-    `;
-  } else if(m.status === 'COMPLETED'){
-    statusHtml = `<span class="status-badge completed"><span class="status-dot-mini"></span>COMPLETED</span>`;
-    actionsHtml = `<a class="btn btn-completed" href="${TELEGRAM_LINK}" target="_blank" rel="noopener noreferrer">THANK YOU</a>`;
-  } else {
-    statusHtml = `<span class="status-badge upcoming"><span class="status-dot-mini"></span>UPCOMING</span>`;
-    actionsHtml = `<button type="button" class="btn btn-upcoming" data-upcoming-time="${esc(timeLabel)}">UPCOMING</button>`;
-  }
-
-  return `
-    <article class="card" data-match-id="${esc(m.id)}">
-      <div class="thumb-wrap">
-        <img src="${esc(m.image)}" alt="${esc(displayTitle)}" loading="lazy" onerror="this.onerror=null;this.src='${FALLBACK_IMG}'">
-        ${langTag ? `<span class="lang-badge">${ICON_GLOBE}${esc(langTag)}</span>` : ''}
-        ${statusHtml}
-      </div>
-      <div class="meta">
-        <div class="teams">${esc(displayTitle)}</div>
-        <div class="event">${esc(displayTournament)}</div>
-        <div class="card-time">${esc(timeLabel)}</div>
-        <div class="actions">${actionsHtml}</div>
-      </div>
-    </article>
-  `;
-}
-
-function attachHandlers(){
-  grid.addEventListener('click', e => {
-    const watchBtn = e.target.closest('.btn-watch-now');
-    if(watchBtn && watchBtn.dataset.url){ window.location.href = watchBtn.dataset.url; return; }
-    const row = e.target.closest('.ww-row');
-    if(row && row.dataset.url){ window.location.href = row.dataset.url; return; }
-    const wwBtn = e.target.closest('.btn-ww');
-    if(wwBtn){
-      const matchId = wwBtn.closest('.card').dataset.matchId;
-      const panel = document.getElementById(wwBtn.dataset.target);
-      if(panel){
-        const willOpen = !panel.classList.contains('open');
-        panel.classList.toggle('open', willOpen);
-        wwBtn.classList.toggle('open', willOpen);
-        if(willOpen){ openPanels.add(matchId); } else { openPanels.delete(matchId); }
+    matches.forEach((m, index) => {
+      const isLive = (m.status || "").toUpperCase() === "LIVE";
+      const img = m.image || "https://www.fancode.com/skillup-uploads/cms-media/Cricket_Fallback_Old_match-card.jpg";
+      const exactTime = m.startTime || "Soon";
+      const card = document.createElement("div");
+      card.className = "match-tile";
+      
+      let actionButtons = "";
+      if (isLive) {
+        actionButtons = `<div onclick="openQuality(${index})" class="watch-btn"><i class="fas fa-play"></i> WATCH NOW</div>`;
+      } else {
+        actionButtons = `
+          <div class="watch-btn not-live"><i class="far fa-clock"></i> NOT LIVE</div>
+          <div onclick="shareUpcoming(${index})" class="share-upcoming-btn"><i class="fas fa-share-alt"></i> Share Match</div>
+        `;
       }
-      return;
-    }
-    const upcomingBtn = e.target.closest('.btn-upcoming');
-    if(upcomingBtn){
-      alert('This match is scheduled to start at:\n' + upcomingBtn.dataset.upcomingTime);
-    }
-  });
 
-  grid.addEventListener('keydown', e => {
-    if(e.key !== 'Enter' && e.key !== ' ') return;
-    const row = e.target.closest('.ww-row');
-    if(row && row.dataset.url){ e.preventDefault(); window.location.href = row.dataset.url; }
-  });
-
-  searchInput.addEventListener('input', () => {
-    const q = searchInput.value.trim().toLowerCase();
-    if(!q){ renderGrid(allMatches, currentTranslations); return; }
-    const filtered = allMatches.filter(m =>
-      m.title.toLowerCase().includes(q) || m.tournament.toLowerCase().includes(q)
-    );
-    renderGrid(filtered, currentTranslations);
-  });
-
-  langSelect.addEventListener('change', async () => {
-    currentLang = langSelect.value;
-    localStorage.setItem('fc_lang', currentLang);
-    if(allMatches.length) await renderGridWithTranslation(allMatches);
-  });
-}
-
-let currentTranslations = {};
-
-async function renderGridWithTranslation(matches){
-  if(!matches.length){
-    grid.innerHTML = '<div class="empty-state">No matches found.</div>';
-    return;
-  }
-
-  if(currentLang === 'en'){
-    currentTranslations = {};
-    renderGrid(matches, {});
-    return;
-  }
-
-  const titles = matches.map(m => m.title);
-  const tournaments = matches.map(m => m.tournament);
-  const allTexts = [...titles, ...tournaments];
-
-  const langName = LANG_NAMES[currentLang] || currentLang;
-  translateMsg.textContent = `Translating to ${langName}…`;
-  translateIndicator.classList.add('visible');
-  isTranslating = true;
-
-  try {
-    const translated = await translateBatch(allTexts, currentLang);
-    const translatedTitles = translated.slice(0, titles.length);
-    const translatedTournaments = translated.slice(titles.length);
-    currentTranslations = {};
-    matches.forEach((m, i) => {
-      currentTranslations[m.id] = {
-        title: translatedTitles[i],
-        tournament: translatedTournaments[i]
-      };
+      card.innerHTML = `
+        <div class="img-wrapper">
+          <img src="${img}" class="match-img">
+          ${isLive
+            ? '<span class="live-badge"><i class="fas fa-circle"></i> LIVE</span>'
+            : '<span class="scheduled-badge"><i class="far fa-calendar"></i> SCHEDULED</span>'}
+        </div>
+        <div class="p-5 flex flex-col flex-1">
+          <h3 class="text-xl font-bold">${m.title || 'Match'}</h3>
+          <div class="text-sm text-gray-400 mt-2">${m.tournament || ''}</div>
+          <div class="match-time"><i class="far fa-clock text-blue-400 mr-1"></i> ${exactTime}</div>
+          <div class="mt-auto pt-3">${actionButtons}</div>
+        </div>
+      `;
+      container.appendChild(card);
     });
-  } catch(e){
-    currentTranslations = {};
+  })
+  .catch(() => {
+    container.innerHTML = "<p class='text-center col-span-full'>Failed to load matches</p>";
+  });
+
+function shareUpcoming(index) {
+  const match = allMatches[index];
+  const matchTitle = match.title || "Upcoming Match";
+  const exactTime = match.startTime || "Coming Soon";
+  
+  const now = new Date();
+  const start = new Date(now.getFullYear(), 0, 0);
+  const diff = now - start;
+  const oneDay = 1000 * 60 * 60 * 24;
+  const dayOfYear = Math.floor(diff / oneDay);
+  const uniqueId = 10 + (dayOfYear % 90);
+
+  const encodedTitle = btoa(encodeURIComponent(matchTitle));
+  const encodedTime = btoa(encodeURIComponent(exactTime));
+  const baseUrl = window.location.origin + window.location.pathname.replace('index.html', '');
+  const targetUrl = `${baseUrl}${PLAYER_URL}?t=${encodedTitle}&time=${encodedTime}`;
+  const textToShare = `Fancode (English)\n${matchTitle}\n${targetUrl}#${uniqueId}`;
+
+  if (navigator.share) {
+    navigator.share({
+      title: 'SHANAEDITX LIVE',
+      text: textToShare,
+    }).catch(() => {});
+  } else {
+    navigator.clipboard.writeText(textToShare).then(() => {
+      showToast();
+    });
   }
-
-  translateIndicator.classList.remove('visible');
-  isTranslating = false;
-
-  const q = searchInput.value.trim().toLowerCase();
-  const filtered = q
-    ? matches.filter(m => m.title.toLowerCase().includes(q) || m.tournament.toLowerCase().includes(q))
-    : matches;
-  renderGrid(filtered, currentTranslations);
 }
 
-function renderGrid(matches, translations){
-  if(!matches.length){
-    grid.innerHTML = '<div class="empty-state">No matches found.</div>';
+function showToast() {
+  const toast = document.getElementById('toast');
+  toast.classList.add('show');
+  setTimeout(() => {
+    toast.classList.remove('show');
+  }, 2500);
+}
+
+function openQuality(index) {
+  const match = allMatches[index];
+  const streams = match.auto_streams && match.auto_streams.ENGLISH && match.auto_streams.ENGLISH.streams;
+  if (!streams || Object.keys(streams).length === 0) {
+    alert("Stream not available");
     return;
   }
-  grid.innerHTML = matches.map(m => renderCard(m, translations ? translations[m.id] : null)).join('');
-}
 
-function buildMatches(cnptvData, worldData){
-  const cnptvMap = {};
-  (cnptvData.matches || []).forEach(m => { cnptvMap[m.match_id] = m; });
-  const matches = (worldData.matches || []).map(m => {
-    const status = String(m.status || '').toUpperCase();
-    const isLive = status === 'LIVE';
-    const cnptv = cnptvMap[m.match_id];
-    const cnptvUrl = cnptv && cnptv.cnptv_cdn ? cnptv.cnptv_cdn : null;
-    const streams = m.streams || {};
-    return {
-      id: m.match_id,
-      title: m.title || 'Match',
-      tournament: m.tournament || '',
-      image: m.image || FALLBACK_IMG,
-      status: status === 'LIVE' || status === 'COMPLETED' ? status : 'UPCOMING',
-      language: m.language,
-      isLive,
-      time: parseMatchTime(m.startTime),
-      langCode: langToCode(m.language, isLive),
-      cnptvUrl,
-      lk: streams.fancode_lk_cdn || null,
-      np: streams.fancode_np_cdn || null,
-      bd: streams.fancode_bd_cdn || null
+  const list = document.getElementById("qualityList");
+  list.innerHTML = "";
+
+  const order = ['1080p','720p','540p','480p','360p','240p'];
+  const sortedKeys = Object.keys(streams).sort((a, b) => order.indexOf(b) - order.indexOf(a));
+
+  sortedKeys.forEach(q => {
+    const btn = document.createElement("div");
+    btn.className = "quality-item";
+    btn.innerText = q;
+    btn.onclick = function () {
+      const encodedStream = btoa(streams[q]);
+      const encodedTitle = btoa(encodeURIComponent(match.title || "Match"));
+      const exactTime = match.startTime || "Soon";
+      const encodedTime = btoa(encodeURIComponent(exactTime));
+      window.location.href = `${PLAYER_URL}?data=${encodeURIComponent(encodedStream)}&t=${encodedTitle}&time=${encodedTime}`;
     };
+    list.appendChild(btn);
   });
-  matches.sort((a,b) => {
-    if(a.isLive !== b.isLive) return a.isLive ? -1 : 1;
-    const at = a.time ? a.time.getTime() : Infinity;
-    const bt = b.time ? b.time.getTime() : Infinity;
-    return at - bt;
-  });
-  return matches;
+
+  document.getElementById("qualityModal").classList.remove("hidden");
 }
 
-async function refresh(isFirstLoad){
-  try{
-    const [cnptvData, worldData] = await Promise.all([
-      fetch(CNPTV_SOURCE,{cache:'no-store'}).then(r => r.json()).catch(() => ({matches:[]})),
-      fetch(WORLD_SOURCE,{cache:'no-store'}).then(r => r.json())
-    ]);
-    lastUpdatedAt = parseUpdatedAt(worldData.updatedAt) || new Date();
-    const snapshot = JSON.stringify(worldData.matches || []);
-    if(!isFirstLoad && snapshot === lastWorldSnapshot){
-      lastUpdateEl.textContent = 'LAST UPDATE: ' + formatAbsoluteIST(lastUpdatedAt);
-      return;
-    }
-    lastWorldSnapshot = snapshot;
-    allMatches = buildMatches(cnptvData, worldData);
-    await renderGridWithTranslation(allMatches);
-    lastUpdateEl.textContent = 'LAST UPDATE: ' + formatAbsoluteIST(lastUpdatedAt);
-  } catch(err){
-    if(isFirstLoad){
-      grid.innerHTML = '<div class="empty-state">Couldn\'t load the match board. Try refreshing.</div>';
-      lastUpdateEl.textContent = 'LAST UPDATE: UNAVAILABLE';
-    }
-  }
+function closeQuality() {
+  document.getElementById("qualityModal").classList.add("hidden");
 }
-
-function loadVisitorCounter(){
-  fetch(HIT_COUNTER_URL,{cache:'no-store'})
-    .then(r => r.json())
-    .then(data => {
-      document.getElementById('vcTotal').textContent = data.total_formatted != null ? data.total_formatted : '—';
-      document.getElementById('vcUnique').textContent = data.unique_formatted != null ? data.unique_formatted : '—';
-    })
-    .catch(() => {
-      const box = document.getElementById('visitorCounter');
-      if(box) box.style.display = 'none';
-    });
-}
-
-attachHandlers();
-refresh(true);
-loadVisitorCounter();
-setInterval(() => refresh(false), REFRESH_INTERVAL_MS);
-
-document.getElementById('joinTelegramBtn').addEventListener('click', () => {
-  window.open(TELEGRAM_LINK, '_blank');
-});
-
-const telegramModal = document.getElementById('telegramModal');
-window.addEventListener('load', () => {
-  if(!sessionStorage.getItem('fc_telegram_joined')){
-    telegramModal.classList.remove('hidden');
-  }
-});
-document.getElementById('joinButton').addEventListener('click', () => {
-  sessionStorage.setItem('fc_telegram_joined','yes');
-  telegramModal.classList.add('hidden');
-});
-document.getElementById('closeButton').addEventListener('click', () => {
-  sessionStorage.setItem('fc_telegram_joined','yes');
-  telegramModal.classList.add('hidden');
-});
 </script>
 
 </body>
