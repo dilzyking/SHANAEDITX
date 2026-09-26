@@ -286,9 +286,20 @@ html, body { height: 100%; overflow: hidden; background: #000; }
     if (!res.ok) throw new Error('Failed to load stream list');
     const data = await res.json();
 
-    const url = data[rawId];
-    if (!url) {
+    // New JSON structure: { iframes: [ { id, name, type, iframeSrc, hit, get }, ... ] }
+    const list = Array.isArray(data) ? data : (data.iframes || []);
+    const entry = list.find(function (item) {
+      return item && (item.id === rawId);
+    });
+
+    if (!entry) {
       stateMsg.textContent = 'Stream not found: ' + rawId;
+      return;
+    }
+
+    const url = entry.iframeSrc || entry.url || entry.src;
+    if (!url) {
+      stateMsg.textContent = 'Stream URL missing for: ' + rawId;
       return;
     }
 
@@ -300,6 +311,11 @@ html, body { height: 100%; overflow: hidden; background: #000; }
 
     stateMsg.remove();
     playerWrap.prepend(iframe);
+
+    // Fire hit counter if provided
+    if (entry.hit) {
+      try { fetch(entry.hit, { mode: 'no-cors' }); } catch (e) {}
+    }
 
   } catch (err) {
     stateMsg.textContent = 'Error loading stream. Please try again.';
