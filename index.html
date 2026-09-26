@@ -1,1 +1,388 @@
-hereko
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SHANAEDITX Live</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; overflow: hidden; background: #000; }
+
+.page {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: #000;
+}
+
+.player-wrap {
+  position: relative;
+  width: 100%;
+  flex: 1;
+  overflow: hidden;
+}
+
+.player-wrap iframe {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  border: none;
+}
+
+.watermark {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  z-index: 10;
+}
+
+.watermark a {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  background: #1d96d3;
+  color: #fff;
+  text-decoration: none;
+  padding: 8px 16px 8px 10px;
+  border-radius: 9px;
+  font-size: 14px;
+  font-weight: 700;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.5), 0 2px 5px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.15);
+}
+
+.wm-icon {
+  width: 28px; height: 28px;
+  background: rgba(255,255,255,0.2);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+
+.wm-icon svg { width: 16px; height: 16px; }
+
+.overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.65);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 20;
+}
+
+.popup {
+  background: #fff;
+  border-radius: 16px;
+  width: 290px;
+  overflow: hidden;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.6), 0 8px 20px rgba(0,0,0,0.3);
+}
+
+.popup-top {
+  background: #1d96d3;
+  padding: 22px 18px 16px;
+  text-align: center;
+  position: relative;
+}
+
+.popup-close {
+  position: absolute; top: 10px; right: 11px;
+  background: rgba(255,255,255,0.2);
+  border: none; color: #fff;
+  width: 25px; height: 25px;
+  border-radius: 50%; font-size: 13px;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+}
+
+.popup-circle {
+  width: 54px; height: 54px;
+  background: rgba(255,255,255,0.2);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  margin: 0 auto 10px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+}
+
+.popup-circle svg { width: 28px; height: 28px; }
+
+.popup-top h2 { color: #fff; font-size: 16px; font-weight: 700; margin: 0 0 2px; }
+.popup-top p { color: rgba(255,255,255,0.85); font-size: 12px; }
+
+.popup-body { padding: 14px 16px 18px; text-align: center; }
+.popup-body p { font-size: 12.5px; color: #666; line-height: 1.55; margin-bottom: 13px; }
+
+.join-btn {
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  background: #1d96d3; color: #fff; text-decoration: none;
+  border-radius: 9px; padding: 11px;
+  font-size: 14px; font-weight: 700;
+  margin-bottom: 8px; width: 100%;
+  box-shadow: 0 4px 14px rgba(29,150,211,0.5);
+}
+
+.join-btn svg { width: 17px; height: 17px; }
+
+.skip-btn {
+  font-size: 12px; color: #aaa;
+  background: none; border: none; cursor: pointer;
+}
+.skip-btn:hover { color: #555; }
+
+.corner-blur {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 15%;
+  height: 12%;
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  pointer-events: none;
+  z-index: 9;
+}
+
+.state-msg {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #888;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-size: 14px;
+  text-align: center;
+  padding: 20px;
+  z-index: 5;
+}
+
+/* Standalone fullscreen control */
+.fs-btn {
+  position: fixed;
+  right: 12px;
+  bottom: 12px;
+  z-index: 99999;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  margin: 0;
+  border: 0;
+  border-radius: 6px;
+  background: #fff;
+  color: #111;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 3px 12px rgba(0,0,0,.45);
+  -webkit-appearance: none;
+  appearance: none;
+}
+.fs-btn svg {
+  width: 22px;
+  height: 22px;
+}
+.fs-btn:active {
+  transform: scale(0.96);
+}
+
+</style>
+</head>
+<body>
+
+<div class="page">
+  <div class="player-wrap" id="playerWrap">
+
+    <div class="state-msg" id="stateMsg">Loading stream...</div>
+
+    <div class="corner-blur"></div>
+
+    <div class="watermark">
+      <a href="https://t.me/+U_REj979FENlMTM9" target="_blank">
+        <div class="wm-icon">
+          <svg viewBox="0 0 24 24" fill="white"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.447 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.333-.373-.12L7.88 13.47l-2.96-.924c-.643-.204-.657-.643.136-.953l11.57-4.461c.537-.194 1.006.131.836.944z"/></svg>
+        </div>
+        Join SHANAEDITX
+      </a>
+    </div>
+
+    <!-- 1st Popup -->
+    <div class="overlay" id="overlay" style="display:none;">
+      <div class="popup">
+        <div class="popup-top">
+          <button class="popup-close" onclick="document.getElementById('overlay').style.display='none'">✕</button>
+          <div class="popup-circle">
+            <svg viewBox="0 0 24 24" fill="white"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.447 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.333-.373-.12L7.88 13.47l-2.96-.924c-.643-.204-.657-.643.136-.953l11.57-4.461c.537-.194 1.006.131.836.944z"/></svg>
+          </div>
+          <h2>Join @SHANAEDITX</h2>
+          <p>Live Cricket Streams &amp; Updates</p>
+        </div>
+        <div class="popup-body">
+          <p>Get live stream links, match alerts and exclusive cricket content on our Telegram channel.</p>
+          <a class="join-btn" href="https://t.me/+U_REj979FENlMTM9" target="_blank">
+            <svg viewBox="0 0 24 24" fill="white"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.447 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.333-.373-.12L7.88 13.47l-2.96-.924c-.643-.204-.657-.643.136-.953l11.57-4.461c.537-.194 1.006.131.836.944z"/></svg>
+            Join Channel
+          </a>
+          <button class="skip-btn" onclick="document.getElementById('overlay').style.display='none'">No thanks, watch now</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2nd Popup (Unclosable 24-hour access lock) -->
+    <div class="overlay" id="access24Overlay" style="display:none;">
+      <div class="popup">
+        <div class="popup-top">
+          <div class="popup-circle">
+            <svg viewBox="0 0 24 24" fill="white">
+              <path d="M12 2a10 10 0 1 0 10 10A10.011 10.011 0 0 0 12 2zm.75 5h-1.5v5.31l4.22 2.53.77-1.28-3.49-2.09z"/>
+            </svg>
+          </div>
+          <h2>Free Access Over</h2>
+          <p>24 Hours Unlock Required</p>
+        </div>
+        <div class="popup-body">
+          <p style="margin-bottom:18px; font-weight:500;">free access over, join our telegram channel to unlock 24 hr access in this web</p>
+          <a class="join-btn" href="https://t.me/+U_REj979FENlMTM9" target="_blank" style="margin-bottom:0;">
+            <svg viewBox="0 0 24 24" fill="white"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.447 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.333-.373-.12L7.88 13.47l-2.96-.924c-.643-.204-.657-.643.136-.953l11.57-4.461c.537-.194 1.006.131.836.944z"/></svg>
+            Join Telegram
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Standalone fullscreen control -->
+    <button class="fs-btn" id="fullscreenBtn" aria-label="Enter fullscreen" title="Enter fullscreen">
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </button>
+  </div>
+</div>
+
+<script>
+// Show 1st popup immediately on load
+(function () {
+  var ov = document.getElementById('overlay');
+  if (ov) ov.style.display = 'flex';
+})();
+
+(async function () {
+  const JSON_URL = "https://allrounder2-0.pages.dev/id.json";
+
+  const params = new URLSearchParams(window.location.search);
+  const rawId = params.get('stream') || params.get('id');
+  const stateMsg = document.getElementById('stateMsg');
+  const playerWrap = document.getElementById('playerWrap');
+
+  if (!rawId) {
+    stateMsg.textContent = 'No stream selected. Use ?stream=ID or ?id=ID in the URL.';
+    return;
+  }
+
+  try {
+    const res = await fetch(JSON_URL, { cache: 'no-store' });
+    if (!res.ok) throw new Error('Failed to load stream list');
+    const data = await res.json();
+
+    const url = data[rawId];
+    if (!url) {
+      stateMsg.textContent = 'Stream not found: ' + rawId;
+      return;
+    }
+
+    const iframe = document.createElement('iframe');
+    iframe.src = url;
+    iframe.setAttribute('allowfullscreen', '');
+    iframe.setAttribute('allow', 'autoplay; fullscreen; encrypted-media');
+    iframe.setAttribute('scrolling', 'no');
+
+    stateMsg.remove();
+    playerWrap.prepend(iframe);
+
+  } catch (err) {
+    stateMsg.textContent = 'Error loading stream. Please try again.';
+  }
+})();
+
+// 2nd Popup Logic (15 sec timer, no close button, 24-hr persistence)
+(function () {
+  var first = document.getElementById('overlay');
+  var second = document.getElementById('access24Overlay');
+  var join24 = second ? second.querySelector('.join-btn') : null;
+  if (!first || !second || !join24) return;
+
+  var KEY = 'shanaeditx_24hr_access_joined';
+  var cooldown = 24 * 60 * 60 * 1000;
+  var timer = null;
+
+  function canShow() {
+    var joinedAt = parseInt(localStorage.getItem(KEY) || '0', 10);
+    return !joinedAt || (Date.now() - joinedAt >= cooldown);
+  }
+
+  function show24() {
+    if (canShow()) {
+      second.style.display = 'flex';
+    }
+  }
+
+  function scheduleSecondPopup() {
+    clearTimeout(timer);
+    timer = setTimeout(show24, 15000);
+  }
+
+  // Observe when 1st popup gets closed
+  var observer = new MutationObserver(function () {
+    if (first.style.display === 'none') {
+      observer.disconnect();
+      scheduleSecondPopup();
+    }
+  });
+
+  if (first.style.display === 'none') {
+    scheduleSecondPopup();
+  } else {
+    observer.observe(first, { attributes: true, attributeFilter: ['style'] });
+  }
+
+  join24.addEventListener('click', function () {
+    localStorage.setItem(KEY, String(Date.now()));
+    second.style.display = 'none';
+  });
+})();
+
+// Standalone fullscreen button
+(function () {
+  var btn = document.getElementById('fullscreenBtn');
+  var wrap = document.getElementById('playerWrap');
+  if (!btn || !wrap) return;
+
+  function goFullscreen() {
+    var el = wrap;
+
+    if (document.fullscreenElement || document.webkitFullscreenElement) {
+      var exit = document.exitFullscreen || document.webkitExitFullscreen;
+      if (exit) {
+        try { exit.call(document); } catch (e) {}
+      }
+      return;
+    }
+
+    var fn = el.requestFullscreen ||
+             el.webkitRequestFullscreen ||
+             el.mozRequestFullScreen ||
+             el.msRequestFullscreen;
+
+    if (fn) {
+      try { fn.call(el); } catch (e) {}
+    }
+  }
+
+  btn.onclick = goFullscreen;
+})();
+</script>
+
+</body>
+</html>
